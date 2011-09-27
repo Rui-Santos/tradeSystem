@@ -6,7 +6,15 @@
 	 * @author Evgeniy Sokolov <ewgraf@gmail.com>
 	*/
 
-	require_once(__DIR__.'/../../init.php');
+	$initDir = __DIR__.'/../..';
+
+	$initFile =
+		file_exists($initDir.'/init.php')
+			? $initDir.'/init.php'
+			: $initDir.'/init.tpl.php';
+
+	require_once($initFile);
+
 	\tradeSystem\classesAutoloaderInit();
 
 	\ewgraFramework\ClassesAutoloader::me()->
