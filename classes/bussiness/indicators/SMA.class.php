@@ -24,6 +24,11 @@
 			$this->period = $period;
 		}
 
+		public function getPeriod()
+		{
+			return $this->period;
+		}
+
 		/**
 		 * @return SMA
 		 */

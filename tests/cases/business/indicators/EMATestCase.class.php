@@ -5,7 +5,7 @@
 	 * @license http://www.opensource.org/licenses/bsd-license.php BSD
 	 * @author Evgeniy Sokolov <ewgraf@gmail.com>
 	*/
-	final class EMATestCase extends BaseIndicatorTest
+	final class EMATestCase extends TradeSystemTestCase
 	{
 		public function testCommon()
 		{
@@ -13,26 +13,24 @@
 
 			$EMA = \tradeSystem\EMA::create($period);
 
-			$series = $this->getSeries(1, $period-1);
+			$barReader =
+				\tradeSystem\FinamBarReader::create()->
+				setFileName(CASES_DIR."/input/SBER_110601_110901.txt")->
+				skipHead();
 
-			foreach ($series as $value)
-				$EMA->handle($value);
+			while(($bar = $barReader->getNext()) && $barReader->getRow() < $period)
+				$EMA->handle($bar->getClose());
 
 			$this->assertFalse($EMA->hasValue());
 
-			$series = $this->getSeries($period, 1);
+			$EMA->handle($barReader->getNext()->getClose());
 
-			foreach ($series as $value)
-				$EMA->handle($value);
+			$this->assertTrue($EMA->hasValue());
+			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 97.215));
 
-			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 101.933));
+			$EMA->handle($barReader->getNext()->getClose());
 
-			$series = $this->getSeries($period+1, 1);
-
-			foreach ($series as $value)
-				$EMA->handle($value);
-
-			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 101.91791));
+			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 96.98138));
 		}
 	}
 ?>

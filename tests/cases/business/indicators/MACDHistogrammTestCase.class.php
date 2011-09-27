@@ -5,24 +5,10 @@
 	 * @license http://www.opensource.org/licenses/bsd-license.php BSD
 	 * @author Evgeniy Sokolov <ewgraf@gmail.com>
 	*/
-	final class MACDHistogrammTestCase extends BaseIndicatorTest
+	final class MACDHistogrammTestCase extends TradeSystemTestCase
 	{
 		public function testCommon()
 		{
-			$resultSeries = array_fill(0, 33, null);
-			$resultSeries[] = -0.19268;
-			$resultSeries[] = -0.27893;
-			$resultSeries[] = -0.31616;
-			$resultSeries[] = -0.31553;
-			$resultSeries[] = -0.2924;
-			$resultSeries[] = -0.25889;
-			$resultSeries[] = -0.18624;
-			$resultSeries[] = -0.04328;
-			$resultSeries[] = 0.00936;
-			$resultSeries[] = 0.03004;
-			$resultSeries[] = 0.00976;
-			$resultSeries[] = 0.03758;
-
 			$shortEMA = \tradeSystem\EMA::create(12);
 			$longEMA = \tradeSystem\EMA::create(26);
 
@@ -41,13 +27,27 @@
 				addIndicator($MACDSignal)->
 				addIndicator($MACDHistogramm);
 
-			foreach ($this->getBigSeries(0, 45) as $key => $value) {
-				$chart->handleBar(
-					\tradeSystem\Bar::create()->
-					setClose($value)
-				);
+			$barReader =
+				\tradeSystem\FinamBarReader::create()->
+				setFileName(CASES_DIR."/input/SBER_110601_110901.txt")->
+				skipHead();
 
-				$this->assertSame($resultSeries[$key], $MACDHistogramm->getValue());
+			while(
+				($bar = $barReader->getNext())
+				&& $barReader->getRow() < ($longEMA->getPeriod()+$MACDSignal->getEMAPeriod()-1)
+			)
+				$chart->handleBar($bar);
+
+			$this->assertFalse($MACDHistogramm->hasValue());
+
+			$assertValues = array(
+				0.12384, 0.19107, 0.21427, 0.23116, 0.2663
+			);
+
+			foreach ($assertValues as $assertValue) {
+				$chart->handleBar($barReader->getNext());
+				$this->assertTrue($MACDHistogramm->hasValue());
+				$this->assertTrue(\tradeSystem\Math::eq($MACDHistogramm->getValue(), $assertValue));
 			}
 		}
 	}

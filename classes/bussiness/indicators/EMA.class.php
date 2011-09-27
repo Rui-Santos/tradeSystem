@@ -28,6 +28,11 @@
 			$this->SMA = SMA::create($period);
 		}
 
+		public function getPeriod()
+		{
+			return $this->period;
+		}
+
 		/**
 		 * @return EMA
 		 */

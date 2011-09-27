@@ -5,7 +5,7 @@
 	 * @license http://www.opensource.org/licenses/bsd-license.php BSD
 	 * @author Evgeniy Sokolov <ewgraf@gmail.com>
 	*/
-	final class SMATestCase extends BaseIndicatorTest
+	final class SMATestCase extends TradeSystemTestCase
 	{
 		public function testCommon()
 		{
@@ -13,26 +13,24 @@
 
 			$SMA = \tradeSystem\SMA::create($period);
 
-			$series = $this->getSeries(1, $period-1);
+			$barReader =
+				\tradeSystem\FinamBarReader::create()->
+				setFileName(CASES_DIR."/input/SBER_110601_110901.txt")->
+				skipHead();
 
-			foreach ($series as $value)
-				$SMA->handle($value);
+			while(($bar = $barReader->getNext()) && $barReader->getRow() < $period)
+				$SMA->handle($bar->getClose());
 
 			$this->assertFalse($SMA->hasValue());
 
-			$series = $this->getSeries($period, 1);
+			$SMA->handle($barReader->getNext()->getClose());
 
-			foreach ($series as $value)
-				$SMA->handle($value);
+			$this->assertTrue($SMA->hasValue());
+			$this->assertTrue(\tradeSystem\Math::eq($SMA->getValue(), 97.215));
 
-			$this->assertTrue(\tradeSystem\Math::eq($SMA->getValue(), 101.933));
+			$SMA->handle($barReader->getNext()->getClose());
 
-			$series = $this->getSeries($period+1, 1);
-
-			foreach ($series as $value)
-				$SMA->handle($value);
-
-			$this->assertTrue(\tradeSystem\Math::eq($SMA->getValue(), 101.878));
+			$this->assertTrue(\tradeSystem\Math::eq($SMA->getValue(), 97.007));
 		}
 	}
 ?>

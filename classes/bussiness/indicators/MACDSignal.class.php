@@ -33,6 +33,11 @@
 			parent::__construct();
 		}
 
+		public function getEMAPeriod()
+		{
+			return $this->EMA->getPeriod();
+		}
+
 		public function getValue()
 		{
 			return $this->EMA->getValue();
