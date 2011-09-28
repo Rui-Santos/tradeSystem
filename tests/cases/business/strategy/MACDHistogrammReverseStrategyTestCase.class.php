@@ -51,7 +51,7 @@
 				setIndicator($MACDHistogramm)->
 				setSecurity(\tradeSystem\Security::create()->setId('SBER3'));
 
-			$strategy = new BeginStrategy($strategy);
+			$strategy = new \tradeSystem\BeginStrategy($strategy);
 
 			\tradeSystem\Portfolio::me()->setBalance(10000);
 
