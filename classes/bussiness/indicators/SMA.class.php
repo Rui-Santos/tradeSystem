@@ -49,7 +49,7 @@
 				);
 			}
 
-			return $this;
+			return parent::handle($value);
 		}
 	}
 ?>

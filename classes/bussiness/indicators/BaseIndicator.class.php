@@ -8,7 +8,7 @@
 	abstract class BaseIndicator implements Indicator
 	{
 		private $history = array();
-		private $historyLimit = 1;
+		private $historyLimit = 5;
 
 		private $value = null;
 
@@ -51,7 +51,7 @@
 					$this->historyLimit
 					&& count($this->history) > $this->historyLimit
 				)
-					array_shift($this->historyLimit);
+					array_shift($this->history);
 			}
 
 			return $this;
@@ -67,7 +67,10 @@
 
 		public function rollbackLastValue()
 		{
-			$this->setValue($this->history[count($this->history)-1]);
+			if (!$this->history)
+				return $this;
+
+			$this->setValue($this->history[count($this->history)-2]);
 			array_pop($this->history);
 			return $this;
 		}

@@ -56,7 +56,7 @@
 			if ($this->MACD->hasValue())
 				$this->EMA->handle($this->MACD->getValue());
 
-			return $this;
+			return parent::handle($value);
 		}
 	}
 ?>
