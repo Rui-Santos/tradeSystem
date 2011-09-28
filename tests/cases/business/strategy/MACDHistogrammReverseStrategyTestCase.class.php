@@ -88,6 +88,9 @@
 					);
 				}
 			}
+
+			$this->assertSame(1, $seriesCounter->getWinSeries());
+			$this->assertSame(1, $seriesCounter->getLoseSeries());
 		}
 	}
 ?>
