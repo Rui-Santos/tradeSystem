@@ -7,24 +7,27 @@
 	*/
 	final class Portfolio extends \ewgraFramework\Singleton
 	{
-		// FIXME XXX: realize me
-		# const BROKER_PAY = 0.001294;
-
 		private $balance = null;
+
+		private $value = null;
 
 		/**
 		 * @return Portfolio
 		 */
-		public function setBalance($balance)
+		public function setBalance($balance, $dropValue = true)
 		{
 			$this->balance = $balance;
+
+			if ($dropValue)
+				$this->value = 0;
+
 			return $this;
 		}
 
 		/**
 		 * @return Portfolio
 		 */
-		public function addBalance($balance)
+		public function addBalance($balance, $addValue = true)
 		{
 			$this->balance = Math::add($this->balance, $balance);
 
@@ -33,13 +36,16 @@
 				.__CLASS__.': add '.$balance.' to balance, now '.$this->balance
 			);
 
+			if ($addValue)
+				$this->value += $balance;
+
 			return $this;
 		}
 
 		/**
 		 * @return Portfolio
 		 */
-		public function subBalance($balance)
+		public function subBalance($balance, $addValue = true)
 		{
 			$this->balance = Math::sub($this->balance, $balance);
 
@@ -48,12 +54,20 @@
 				.__CLASS__.': sub '.$balance.' from balance, now '.$this->balance
 			);
 
+			if ($addValue)
+				$this->value += $balance;
+
 			return $this;
 		}
 
 		public function getBalance()
 		{
 			return $this->balance;
+		}
+
+		public function getValue()
+		{
+			return $this->value;
 		}
 	}
 ?>
