@@ -6,16 +6,15 @@
 	 * @author Evgeniy Sokolov <ewgraf@gmail.com>
 	*/
 
-	if (!isset($argv[1])) {
+	if (!isset($argv[1]))
 		die('You need set input file');
-	}
 
 	$inputFile = $argv[1];
 
-	$initFile =
-		file_exists(__DIR__.'../init.php')
-			? __DIR__.'/../init.php'
-			: __DIR__.'/../init.tpl.php';
+	$initFile = __DIR__.'../../init.php';
+
+	if (!file_exists($initFile))
+		$initFile = __DIR__.'/../../init.tpl.php';
 
 	require_once($initFile);
 
