@@ -63,7 +63,8 @@
 				);
 
 				Log::me()->add(
-					__CLASS__.': realized with price '
+					DateTimeManager::me()->getNow()->format('Y-m-d H:i:s').' '
+					.__CLASS__.': realized with price '
 					.$this->getRealizationPrice().' and count '.$this->getCount().' ('.$this->getSecurity()->getId().')'
 				);
 

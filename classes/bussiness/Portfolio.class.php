@@ -29,7 +29,8 @@
 			$this->balance = Math::add($this->balance, $balance);
 
 			Log::me()->add(
-				__CLASS__.': add '.$balance.' to balance, now '.$this->balance
+				DateTimeManager::me()->getNow()->format('Y-m-d H:i:s').' '
+				.__CLASS__.': add '.$balance.' to balance, now '.$this->balance
 			);
 
 			return $this;
@@ -43,7 +44,8 @@
 			$this->balance = Math::sub($this->balance, $balance);
 
 			Log::me()->add(
-				__CLASS__.': sub '.$balance.' from balance, now '.$this->balance
+				DateTimeManager::me()->getNow()->format('Y-m-d H:i:s').' '
+				.__CLASS__.': sub '.$balance.' from balance, now '.$this->balance
 			);
 
 			return $this;

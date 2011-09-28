@@ -116,8 +116,10 @@
 					setType($orderType->getPositionType());
 
 				Log::me()->add(
-					__CLASS__.': open '.$position->getType()->getName().' position with price '
-					.$position->getPrice().' and count '.$position->getCount().' ('.$position->getSecurity()->getId().')'
+					DateTimeManager::me()->getNow()->format('Y-m-d H:i:s').' '
+					.__CLASS__.': open '.$position->getType()->getName().' position with price '
+					.$position->getPrice().' and count '.$position->getCount()
+					.' ('.$position->getSecurity()->getId().')'
 				);
 
 				PositionManager::me()->manage($position);
@@ -141,7 +143,8 @@
 					setSecurity($this->security);
 
 				Log::me()->add(
-					__CLASS__.': add '.$stopLoss->getType()->getName().' stop-loss with price '
+					DateTimeManager::me()->getNow()->format('Y-m-d H:i:s').' '
+					.__CLASS__.': add '.$stopLoss->getType()->getName().' stop-loss with price '
 					.$stopLoss->getPrice().' and count '.$stopLoss->getCount().' ('.$stopLoss->getSecurity()->getId().')'
 				);
 
@@ -164,7 +167,8 @@
 					setSecurity($this->security);
 
 				Log::me()->add(
-					__CLASS__.': add '.$takeProfit->getType()->getName().' take-profit with price '
+					DateTimeManager::me()->getNow()->format('Y-m-d H:i:s').' '
+					.__CLASS__.': add '.$takeProfit->getType()->getName().' take-profit with price '
 					.$takeProfit->getPrice().' and count '.$takeProfit->getCount().', indent is '.$takeProfit->getIndent().' '.$takeProfit->getIndentUnitsType()->getName().' ('.$takeProfit->getSecurity()->getId().')'
 				);
 

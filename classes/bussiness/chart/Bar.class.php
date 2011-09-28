@@ -11,6 +11,10 @@
 		private $close		= null;
 		private $high		= null;
 		private $low		= null;
+
+		/**
+		 * @var \ewgraFramework\DateTime
+		 */
 		private $dateTime	= '';
 
 		/**
@@ -80,12 +84,15 @@
 		/**
 		 * @return Bar
 		 */
-		public function setDateTime($dateTime)
+		public function setDateTime(\ewgraFramework\DateTime $dateTime)
 		{
 			$this->dateTime = $dateTime;
 			return $this;
 		}
 
+		/**
+		 * @return \ewgraFramework\DateTime
+		 */
 		public function getDateTime()
 		{
 			return $this->dateTime;
