@@ -61,6 +61,28 @@
 		/**
 		 * @return Chart
 		 */
+		public function rollbackIndicatorsLastValue()
+		{
+			foreach ($this->indicators as $indicator)
+				$indicator->rollbackLastValue();
+
+			return $this;
+		}
+
+		/**
+		 * @return Chart
+		 */
+		public function handleIndicatorsBar(Bar $bar)
+		{
+			foreach ($this->indicators as $indicator)
+				$indicator->handleBar($bar);
+
+			return $this;
+		}
+
+		/**
+		 * @return Chart
+		 */
 		public function handleBar(Bar $bar)
 		{
 			foreach ($this->indicators as $indicator) {

@@ -58,5 +58,12 @@
 
 			return parent::handle($value);
 		}
+
+		public function rollbackLastValue()
+		{
+			$this->EMA->rollbackLastValue();
+
+			return parent::rollbackLastValue();
+		}
 	}
 ?>

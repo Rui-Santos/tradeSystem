@@ -18,8 +18,15 @@
 				setFileName(CASES_DIR."/input/SBER_110601_110901.txt")->
 				skipHead();
 
-			while(($bar = $barReader->getNext()) && $barReader->getRow() < $period)
+			$lastBar = null;
+
+			while(($bar = $barReader->getNext()) && $barReader->getRow() < $period) {
 				$EMA->handle($bar->getClose());
+				$lastBar = $bar;
+			}
+
+			$EMA->rollbackLastValue();
+			$EMA->handle($lastBar->getClose());
 
 			$this->assertFalse($EMA->hasValue());
 
@@ -28,8 +35,15 @@
 			$this->assertTrue($EMA->hasValue());
 			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 97.215));
 
-			$EMA->handle($barReader->getNext()->getClose());
+			$nextBar = $barReader->getNext();
 
+			$EMA->handle($nextBar->getClose());
+
+			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 96.98138));
+
+			$EMA->rollbackLastValue();
+			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 97.215));
+			$EMA->handle($nextBar->getClose());
 			$this->assertTrue(\tradeSystem\Math::eq($EMA->getValue(), 96.98138));
 		}
 	}

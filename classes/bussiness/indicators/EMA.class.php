@@ -57,5 +57,13 @@
 
 			return parent::handle($value);
 		}
+
+		public function rollbackLastValue()
+		{
+			if (!$this->hasValue())
+				$this->SMA->rollbackLastValue();
+
+			return parent::rollbackLastValue();
+		}
 	}
 ?>

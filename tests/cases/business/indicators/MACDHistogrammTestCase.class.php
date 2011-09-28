@@ -33,11 +33,18 @@
 				setFileName(CASES_DIR."/input/SBER_110601_110901.txt")->
 				skipHead();
 
+			$lastBar = null;
+
 			while(
 				($bar = $barReader->getNext())
 				&& $barReader->getRow() < ($longEMA->getPeriod()+$MACDSignal->getEMAPeriod()-1)
-			)
+			) {
 				$chart->handleBar($bar);
+				$lastBar = $bar;
+			}
+
+			$chart->rollbackIndicatorsLastValue();
+			$chart->handleIndicatorsBar($lastBar);
 
 			$this->assertFalse($MACDHistogramm->hasValue());
 
@@ -46,10 +53,17 @@
 			);
 
 			foreach ($assertValues as $assertValue) {
-				$chart->handleBar($barReader->getNext());
+				$lastBar = $barReader->getNext();
+				$chart->handleBar($lastBar);
 				$this->assertTrue($MACDHistogramm->hasValue());
 				$this->assertTrue(\tradeSystem\Math::eq($MACDHistogramm->getValue(), $assertValue));
 			}
+
+			$chart->rollbackIndicatorsLastValue();
+			$this->assertTrue(\tradeSystem\Math::eq($MACDHistogramm->getValue(), 0.23116));
+
+			$chart->handleIndicatorsBar($lastBar);
+			$this->assertTrue(\tradeSystem\Math::eq($MACDHistogramm->getValue(), 0.2663));
 		}
 	}
 ?>

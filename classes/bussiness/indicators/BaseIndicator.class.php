@@ -67,8 +67,11 @@
 
 		public function rollbackLastValue()
 		{
-			if (count($this->history) < 2)
+			if (count($this->history) < 2) {
+				$this->setValue(null);
+				$this->history = array();
 				return $this;
+			}
 
 			$this->setValue($this->history[count($this->history)-2]);
 			array_pop($this->history);

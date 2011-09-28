@@ -38,7 +38,10 @@
 
 			$canCalculate = true;
 
-			if ($this->hasValue())
+			if (
+				$this->hasValue()
+				&& count($this->values) > $this->period
+			)
 				array_shift($this->values);
 			else if(count($this->values) != $this->period)
 				$canCalculate = false;
@@ -50,6 +53,14 @@
 			}
 
 			return parent::handle($value);
+		}
+
+		public function rollbackLastValue()
+		{
+			if ($this->values)
+				array_pop($this->values);
+
+			return parent::rollbackLastValue();
 		}
 	}
 ?>
