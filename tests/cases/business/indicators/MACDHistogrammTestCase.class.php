@@ -21,6 +21,7 @@
 
 			$chart =
 				\tradeSystem\Chart::create()->
+				setInterval(\tradeSystem\ChartInterval::hourly())->
 				addIndicator($shortEMA)->
 				addIndicator($longEMA)->
 				addIndicator($MACD)->

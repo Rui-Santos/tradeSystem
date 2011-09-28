@@ -12,11 +12,27 @@
 		private $bars 		= array();
 
 		/**
+		 * @var ChartInterval
+		 */
+		private $interval = null;
+
+		private $groupedBars = 0;
+
+		/**
 		 * @return Chart
 		 */
 		public static function create()
 		{
 			return new self;
+		}
+
+		/**
+		 * @return Chart
+		 */
+		public function setInterval(ChartInterval $interval)
+		{
+			$this->interval = $interval;
+			return $this;
 		}
 
 		/**
@@ -47,13 +63,39 @@
 		 */
 		public function handleBar(Bar $bar)
 		{
-			$this->bars[] = $bar;
+			foreach ($this->indicators as $indicator) {
+				if($this->groupedBars)
+					$indicator->rollbackLastValue();
 
-			if (count($this->bars) > $this->barLimit)
-				array_shift($this->bars);
-
-			foreach ($this->indicators as $indicator)
 				$indicator->handleBar($bar);
+			}
+
+			$barDateTime = $this->interval->floorBarDateTime($bar);
+
+			$lastBar = $this->getBarFromEnd();
+
+			if (
+				!$lastBar
+				|| $lastBar->getDateTime()->getTimestamp() !=
+					$barDateTime->getTimestamp()
+			) {
+				$nextBar = clone $bar;
+				$this->bars[] = $nextBar;
+				$nextBar->setDateTime($barDateTime);
+
+				$this->groupedBars = 0;
+			} else {
+				$this->groupedBars++;
+				$lastBar->setLow(min($lastBar->getLow(), $bar->getLow()));
+				$lastBar->setHigh(max($lastBar->getHigh(), $bar->getHigh()));
+				$lastBar->setClose($bar->getClose());
+			}
+
+			if (
+				$this->barLimit
+				&& count($this->bars) > $this->barLimit
+			)
+				array_shift($this->bars);
 
 			return $this;
 		}
@@ -63,6 +105,9 @@
 		 */
 		public function getBarFromEnd($offset = 0)
 		{
+			if (!$this->getBarCount())
+				return null;
+
 			if ($offset > $this->getBarCount())
 				throw new \Exception();
 
