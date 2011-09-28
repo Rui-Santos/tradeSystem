@@ -42,7 +42,10 @@
 		 */
 		public function handleBar(Bar $bar)
 		{
-			return $this->handle($bar->getClose());
+			return
+				$this->hasInner()
+					? $this->getInner()->handleBar($bar)
+					: $this;
 		}
 
 		/**
@@ -151,6 +154,17 @@
 			}
 
 			$this->setInner($strategy);
+			return $this;
+		}
+
+		/**
+		 * @return Strategy
+		 */
+		public function insertUp(Strategy $strategy)
+		{
+			$this->getOuter()->setInner($strategy);
+			$strategy->setInner($this);
+
 			return $this;
 		}
 	}

@@ -11,6 +11,7 @@
 		private $close		= null;
 		private $high		= null;
 		private $low		= null;
+		private $dateTime	= '';
 
 		/**
 		 * @return Bar
@@ -74,6 +75,20 @@
 		public function getLow()
 		{
 			return $this->low;
+		}
+
+		/**
+		 * @return Bar
+		 */
+		public function setDateTime($dateTime)
+		{
+			$this->dateTime = $dateTime;
+			return $this;
+		}
+
+		public function getDateTime()
+		{
+			return $this->dateTime;
 		}
 
 		public function getMiddle()

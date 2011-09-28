@@ -29,7 +29,7 @@
 			return
 				$this->has($security)
 					? $this->positions[$security->getId()]
-					: null;
+					: array();
 		}
 
 		/**

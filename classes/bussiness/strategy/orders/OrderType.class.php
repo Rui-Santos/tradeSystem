@@ -15,6 +15,11 @@
 			self::SELL	=> 'Sell'
 		);
 
+		protected $inverted = array(
+			self::BUY 	=> self::SELL,
+			self::SELL	=> self::BUY
+		);
+
 		protected $positionType = array(
 			self::BUY 	=> PositionType::LONG,
 			self::SELL	=> PositionType::SHORT
@@ -44,6 +49,11 @@
 		public function getPositionType()
 		{
 			return PositionType::create($this->positionType[$this->getId()]);
+		}
+
+		public function getInverted()
+		{
+			return OrderType::create($this->inverted[$this->getId()]);
 		}
 
 		public function getInvertedPositionType()

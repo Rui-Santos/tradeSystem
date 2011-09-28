@@ -53,7 +53,6 @@
 		public function handle($value)
 		{
 			$this->simpleHandle($value);
-
 			return parent::handle($value);
 		}
 
@@ -65,7 +64,7 @@
 			$this->simpleHandle($bar->getLow(), $this->getPrice());
 			$this->simpleHandle($bar->getHigh(), $this->getPrice());
 
-			return $this->handle($bar->getClose());
+			return parent::handleBar($bar);
 		}
 
 		private function isRealizePrice($price)

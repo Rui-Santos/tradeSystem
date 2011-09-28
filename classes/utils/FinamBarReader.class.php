@@ -85,7 +85,8 @@
 					setOpen($data[4])->
 					setHigh($data[5])->
 					setLow($data[6])->
-					setClose($data[7]);
+					setClose($data[7])->
+					setDateTime($data[2].' '.$data[3]);
 			}
 
 			return $result;

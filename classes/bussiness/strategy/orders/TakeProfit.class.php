@@ -96,7 +96,6 @@
 		public function handle($value)
 		{
 			$this->simpleHandle($value);
-
 			return parent::handle($value);
 		}
 
@@ -113,7 +112,7 @@
 			$this->simpleHandle($bar->getLow(), $realizationPrice);
 			$this->simpleHandle($bar->getHigh(), $realizationPrice);
 
-			return $this->handle($bar->getClose());
+			return parent::handleBar($bar);
 		}
 
 		public function isWatchIndent()
