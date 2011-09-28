@@ -65,6 +65,19 @@
 		/**
 		 * @return PositionManager
 		 */
+		public function closeAll(Security $security, $closePrice)
+		{
+			$existPositions = PositionStorage::me()->getList($security);
+
+			foreach ($existPositions as $existPosition)
+				$this->close($existPosition, $existPosition->getCount(), $closePrice);
+
+			return $this;
+		}
+
+		/**
+		 * @return PositionManager
+		 */
 		private function close(Position $position, $count, $closePrice)
 		{
 			$position->subCount($count);

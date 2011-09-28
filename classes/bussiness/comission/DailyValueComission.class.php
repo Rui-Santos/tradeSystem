@@ -46,14 +46,16 @@
 						Math::div($this->percent, 100)
 					);
 
-				Portfolio::me()->subBalance($comission, false);
+				if ($comission) {
+					Portfolio::me()->subBalance($comission, false);
 
-				Log::me()->add(
-					$now->format('Y-m-d H:i:s').' '
-					.__CLASS__.': sub daily value commision '.$comission.' from balance, now '.Portfolio::me()->getBalance()
-				);
+					Log::me()->add(
+						$now->format('Y-m-d H:i:s').' '
+						.__CLASS__.': sub daily value commision '.$comission.' from balance, now '.Portfolio::me()->getBalance()
+					);
 
-				$this->prevValue = Portfolio::me()->getValue();
+					$this->prevValue = Portfolio::me()->getValue();
+				}
 			}
 
 			if ($this->prevValue === null)

@@ -22,6 +22,20 @@
 		/**
 		 * @return Chart
 		 */
+		public function setBarLimit($barLimit)
+		{
+			$this->barLimit = $barLimit;
+			return $this;
+		}
+
+		public function getBarCount()
+		{
+			return count($this->bars);
+		}
+
+		/**
+		 * @return Chart
+		 */
 		public function addIndicator(Indicator $indicator)
 		{
 			$this->indicators[] = $indicator;
@@ -42,6 +56,17 @@
 				$indicator->handleBar($bar);
 
 			return $this;
+		}
+
+		/**
+		 * @return Bar
+		 */
+		public function getBarFromEnd($offset = 0)
+		{
+			if ($offset > $this->getBarCount())
+				throw new \Exception();
+
+			return $this->bars[$this->getBarCount()-1-$offset];
 		}
 	}
 ?>

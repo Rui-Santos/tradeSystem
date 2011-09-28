@@ -56,6 +56,7 @@
 
 					if ($strategy->isRealized()) {
 						$this->realized();
+						$this->drop();
 						break;
 					}
 				}
