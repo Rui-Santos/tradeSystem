@@ -12,6 +12,11 @@
 		const TAKE_PROFIT_INDENT	= 0.4;
 
 		/**
+		 * @var SeriesCounter
+		 */
+		private $seriesCounter = null;
+
+		/**
 		 * @var Security
 		 */
 		private $security = null;
@@ -22,6 +27,20 @@
 		private $indicator = null;
 
 		private $prevValue = null;
+
+		/**
+		 * @return MACDHistogrammReverseStrategy
+		 */
+		public function setSeriesCounter(SeriesCounter $seriesCounter)
+		{
+			$this->seriesCounter = $seriesCounter;
+			return $this;
+		}
+
+		public function getSeriesCounter()
+		{
+			return $this->seriesCounter;
+		}
 
 		/**
 		 * @return MACDHistogrammReverseStrategy
@@ -96,12 +115,18 @@
 					setSecurity($this->security)->
 					setType($orderType->getPositionType());
 
+				Log::me()->add(
+					__CLASS__.': open '.$position->getType()->getName().' position with price '
+					.$position->getPrice().' and count '.$position->getCount().' ('.$position->getSecurity()->getId().')'
+				);
+
 				PositionManager::me()->manage($position);
 
 				$invertor = $orderType->getInvertor();
 
 				$stopLoss =
 					StopLoss::create()->
+					setSeriesCounter($this->getSeriesCounter())->
 					setCount($position->getCount())->
 					setPrice(
 						Math::sub(
@@ -115,8 +140,14 @@
 					setType($orderType->getInverted())->
 					setSecurity($this->security);
 
+				Log::me()->add(
+					__CLASS__.': add '.$stopLoss->getType()->getName().' stop-loss with price '
+					.$stopLoss->getPrice().' and count '.$stopLoss->getCount().' ('.$stopLoss->getSecurity()->getId().')'
+				);
+
 				$takeProfit =
 					TakeProfit::create()->
+					setSeriesCounter($this->getSeriesCounter())->
 					setCount($position->getCount())->
 					setIndent(self::TAKE_PROFIT_INDENT)->
 					setIndentUnitsType(UnitsType::value())->
@@ -131,6 +162,11 @@
 					)->
 					setType($orderType->getInverted())->
 					setSecurity($this->security);
+
+				Log::me()->add(
+					__CLASS__.': add '.$takeProfit->getType()->getName().' take-profit with price '
+					.$takeProfit->getPrice().' and count '.$takeProfit->getCount().', indent is '.$takeProfit->getIndent().' '.$takeProfit->getIndentUnitsType()->getName().' ('.$takeProfit->getSecurity()->getId().')'
+				);
 
 				$orGroup =
 					OrderOrGroup::create()->

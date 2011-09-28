@@ -7,6 +7,11 @@
 	*/
 	final class TakeProfit extends BaseOrder
 	{
+		/**
+		 * @var SeriesCounter
+		 */
+		private $seriesCounter = null;
+
 		private $price = null;
 
 		private $extremumPrice = null;
@@ -24,6 +29,20 @@
 		public static function create()
 		{
 			return new self;
+		}
+
+		/**
+		 * @return TakeProfit
+		 */
+		public function setSeriesCounter(SeriesCounter $seriesCounter)
+		{
+			$this->seriesCounter = $seriesCounter;
+			return $this;
+		}
+
+		public function getSeriesCounter()
+		{
+			return $this->seriesCounter;
 		}
 
 		/**
@@ -83,6 +102,14 @@
 							? $realizePrice
 							: $value
 					);
+
+					Log::me()->add(
+						__CLASS__.': realized with price '
+						.$this->getRealizationPrice().' and count '.$this->getCount().' ('.$this->getSecurity()->getId().')'
+					);
+
+					if ($this->getSeriesCounter())
+						$this->getSeriesCounter()->win();
 				} else
 					$this->updateExtremum($value);
 			}

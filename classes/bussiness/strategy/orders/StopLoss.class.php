@@ -7,6 +7,11 @@
 	*/
 	final class StopLoss extends BaseOrder
 	{
+		/**
+		 * @var SeriesCounter
+		 */
+		private $seriesCounter = null;
+
 		private $price = null;
 
 		/**
@@ -15,6 +20,20 @@
 		public static function create()
 		{
 			return new self;
+		}
+
+		/**
+		 * @return StopLoss
+		 */
+		public function setSeriesCounter(SeriesCounter $seriesCounter)
+		{
+			$this->seriesCounter = $seriesCounter;
+			return $this;
+		}
+
+		public function getSeriesCounter()
+		{
+			return $this->seriesCounter;
 		}
 
 		/**
@@ -42,6 +61,14 @@
 						? $realizePrice
 						: $value
 				);
+
+				Log::me()->add(
+					__CLASS__.': realized with price '
+					.$this->getRealizationPrice().' and count '.$this->getCount().' ('.$this->getSecurity()->getId().')'
+				);
+
+					if ($this->getSeriesCounter())
+						$this->getSeriesCounter()->lose();
 			}
 
 			return $this;

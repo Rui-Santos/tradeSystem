@@ -10,12 +10,14 @@
 		public function setUp()
 		{
 			$this->saveSingleton(\tradeSystem\Portfolio::me());
+			$this->saveSingleton(\tradeSystem\Log::me());
 			$this->saveSingleton(\tradeSystem\PositionStorage::me());
 		}
 
 		public function tearDown()
 		{
 			$this->restoreSingleton(\tradeSystem\Portfolio::me());
+			$this->restoreSingleton(\tradeSystem\Log::me());
 			$this->restoreSingleton(\tradeSystem\PositionStorage::me());
 		}
 
