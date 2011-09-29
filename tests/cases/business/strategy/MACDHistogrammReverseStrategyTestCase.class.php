@@ -81,12 +81,16 @@
 				($bar = $barReader->getNext())
 				&& $barReader->getRow() < 100
 			) {
-				\tradeSystem\DateTimeManager::me()->setNow($bar->getDateTime());
+				$dateTime = $bar->getDateTime()->format('Y-m-d H:i:s');
+
+				\tradeSystem\DateTimeManager::me()->setNow(
+					\ewgraFramework\DateTime::create(
+						$bar->getDateTime()->format('Y-m-d H:59:59')
+					)
+				);
 
 				$chart->handleBar($bar);
 				$strategy->handleBar($bar);
-
-				$dateTime = $bar->getDateTime()->format('Y-m-d H:i:s');
 
 				if (isset($assertBalance[$dateTime])) {
 					$this->assertEquals(
