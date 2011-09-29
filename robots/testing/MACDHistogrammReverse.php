@@ -39,14 +39,14 @@
 		addIndicator($MACDSignal)->
 		addIndicator($MACDHistogramm);
 
-	$seriesCounter = \tradeSystem\SeriesCounter::create();
-
 	$strategy =
 		new \tradeSystem\MACDHistogrammReverseStrategy(
 			new \tradeSystem\EndStrategy()
 		);
 
 	$security = \tradeSystem\Security::create()->setId('SBER3');
+
+	$seriesCounter = \tradeSystem\SeriesCounter::create();
 
 	$strategy->
 		setSeriesCounter($seriesCounter)->

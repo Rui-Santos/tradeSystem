@@ -62,20 +62,20 @@
 
 		public function simpleHandle($value)
 		{
+			if (DateTimeManager::me()->getNow()->format('i') != 59)
+				return $this;
+
 			$indicatorValue = $this->indicator->getValue();
 
 			if (
-				$this->prevValue !== null
-				&& $this->prevValue >= 0
-				&& $indicatorValue < 0
-			)
-				$this->openPosition($value, OrderType::sell());
-			else if (
-				$this->prevValue !== null
-				&& $this->prevValue <= 0
-				&& $indicatorValue > 0
-			)
-				$this->openPosition($value, OrderType::buy());
+				$this->canOpenPosition()
+				&& $this->prevValue !== null
+			) {
+				if ($this->prevValue >= 0 && $indicatorValue < 0)
+					$this->openPosition($value, OrderType::sell());
+				else if ($this->prevValue <= 0 && $indicatorValue > 0)
+					$this->openPosition($value, OrderType::buy());
+			}
 
 			$this->prevValue = $indicatorValue;
 
@@ -107,7 +107,7 @@
 					)
 				);
 
-			if ($count && $this->canOpenPosition()) {
+			if ($count) {
 				$position =
 					Position::create()->
 					setCount($count)->
